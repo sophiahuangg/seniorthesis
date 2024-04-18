@@ -35,11 +35,26 @@ The NBA API used for this project can be found <a href = "https://github.com/swa
 
 ## Docker
 
-This project relies on Docker for testing and deploying code. 
+This project relies on Docker for testing and deploying code. The project is split into two different containers - one for the database and one for the actual website. 
 
 ## SQL Database
 
-All of the scraped data is stored inside a Postgres database. Each endpoint corresponds with a different table in the database. During the scraping, the data saves as CSV files. They are then converted to SQL files and indexes are created on specific columns in each table. Primarily, indexes were created on columns that contained the game id, player id, team id, and win/loss recrod. The benefit of having a PostgresSQL database is that the data is easily accessible through querying, and tables can be joined together to provide more in depth information.
+All of the scraped data is stored inside a Postgres database. Each endpoint corresponds with a different table in the database. During the scraping, the data saves as CSV files. They are then converted to SQL files, and indexes are created on specific columns in each table. Primarily, indexes were created on columns that contained the game id, player id, team id, and win/loss recrod. The benefit of having a PostgresSQL database is that the data is easily accessible through querying, and tables can be joined together to provide more in depth information.
+
+### List of Relations :
+
+| Name | Number of Rows |
+| ----------- | ----------- |
+| **games**            | 30000 |
+| **playercareerstats**       | 4875 |
+| **playerinfo**           | 4900 |
+| **players**                | 4900 |
+| **playoffboxscores**            | 55036 |
+| **playoffspbp**                     | 658381|
+| **regseasonboxscores**                       | 383904 |
+| **regseasonpbp**                     | 6444243 |
+| **teams**                     | 30 |
+
 
 ## Getting Started
 
