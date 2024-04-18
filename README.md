@@ -61,7 +61,7 @@ All of the scraped data is stored inside a Postgres database. Each endpoint corr
 ### 1. Clone the Repository
 
 ```
-git clone https://github.com/sophiahuangg/seniorthesis.git
+git clone https://github.com/sophiahuangg/nbawebapp.git
 ```
 
 ### 2. Build up Docker
@@ -69,6 +69,8 @@ git clone https://github.com/sophiahuangg/seniorthesis.git
 ```
 docker-compose up -d --build
 ```
+
+This command builds the project and creates all of the SQL schemas. Once you see an output similar to the image below, the project is done building. You can then move on to the next step. As you may notice, this project is separated into two containers like mentioned before - one for the web and one for the database. The web service relies on the pg service, which creates all of the databases, to be correctly working before bulding. This is because the web service needs to run Python code that assumes the existence of the tables in the database already.
 
 #### Output:
 
@@ -80,9 +82,15 @@ docker-compose up -d --build
 sh src/load_data.sh
 ```
 
+The command `docker-compose up -d --build` creates the SQL schemas, but without running the shell script that loads the data, all of the tables will be empty. This command copies all of the CSV data into their respective SQL tables. The lines that do this within the shell script are in the form `docker-compose exec pg psql -U user -d postgres -c "\COPY '$tablename' FROM '$csv' WITH CSV HEADER;"`, where '$tablename' is replaced with the actual table name. 
+
+For purposes of being able to upload the datasets onto Github, the playbyplay data have been split up into separate CSVs by the first four values of their gameId as well as whether the data is from the regular season or playoffs season. The CSVs are then compressed as zip files. The load_data.sh is also responsible for unzipping these zip files and extracting all of the CSVs for the playbyplay data. After each playbyplay CSV is copied onto a SQL table, the CSV files are then automatically removed through the command `rm "$csv"`. 
+
 ### 4. Navigate to the Web Browser
 
 <a href = "http://127.0.0.1:5001"> http://127.0.0.1:5001 </a>
+
+Once the shell script has loaded all of the ncessary data, you should be able to navigate to the provided link and have access to the web app! 
 
 ## Future Improvements/Drawbacks
 
