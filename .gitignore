@@ -17,6 +17,7 @@ dist/
 __pycache__/
 .DS_Store
 
-datasets/
+datasets/regseasonpbp.csv
+datasets/playoffspbp.csv
 
 
