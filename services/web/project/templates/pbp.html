@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Games</title>
+</head>
+<body>  
+    {% block content %}
+
+    <table border="1">
+        <table border="1">
+            <thead>
+                <tbody>
+
+                    {% for col in colnames %}
+                        <th colspan>{{ col[0] }}</th>
+                    {% endfor %}
+                </tbody>
+            </thead>
+        {% for plays in pbp %}
+        <tr>
+        {%for play in plays%}
+        <td>
+        {{play}}
+        </td>
+        {% endfor %}
+        </tr>
+        {% endfor %}
+
+{% endblock %}
+
+</html>

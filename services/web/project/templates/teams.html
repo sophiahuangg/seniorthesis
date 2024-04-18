@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Teams</title>
+</head>
+<body>
+    {% block content %}
+    <table border="1">
+        <tr>
+            <th>Team Name</th>
+            <th>Wins</th>
+            <th>Losses</th>
+        </tr>
+        {% for team in teams %}
+        <tr>
+            <td>{{ team[0] }}</td>
+            <td>
+                {% for wl in winloss %}
+                    {% if wl[0] == team[0] %}
+                        {% if wl[1] == 'W' %}
+                            <a href="/teams/{{ team[0] }}/{{ wl[1] }}">{{ wl[2] }}</a>
+                        {% endif %}
+                    {% endif %}
+                {% endfor %}
+            </td>
+            <td>
+                {% for wl in winloss %}
+                    {% if wl[0] == team[0] %}
+                        {% if wl[1] == 'L' %}
+                            <a href="/teams/{{ team[0] }}/{{ wl[1] }}">{{ wl[2] }}</a>
+                        {% endif %}
+                    {% endif %}
+                {% endfor %}
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+    
+        
+
+    {% endblock %}
+</body>
+</html>
