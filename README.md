@@ -6,6 +6,17 @@ This project serves as a tool to search up game specific information for each te
 
 This project is built using the NBA API, SQL, Docker, and Jinja. First, relevant data is scraped using the NBA API, then stored in a PostgresSQL database. In total, there are nine tables that serve as the backend of the project. They contain player, team, and game information that are displayed on the website.
 
+### Main Team Route:
+ ![docker ps output](teamsimg.png)
+
+
+### Example of Box Score Display:
+ ![docker ps output](boxscoresimg.png)
+
+### Example of Play By Play Display:
+ ![docker ps output](pbpimg.png)
+
+
 ## NBA API
 
 The NBA API used for this project can be found <a href = "https://github.com/swar/nba_api">here</a>. 
@@ -65,3 +76,5 @@ sh src/load_data.sh
 2. Automating the process of loading data into the PostgresSQL databases instead of needing to run another shell script that loads in the data. 
 
 3. Automating dataset creation to contain up to date information.
+
+4. Create more indexes to speed up querying.
