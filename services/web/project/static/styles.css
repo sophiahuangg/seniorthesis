@@ -30,7 +30,7 @@ nav ul li a {
 
 nav ul li a:hover {
     text-decoration: white underline;
-
+    color: white;
 }
 
 h1 {
@@ -77,3 +77,4 @@ table td:first-child {
     left: 50%;
     transform: translate(-50%, -50%);
 }
+

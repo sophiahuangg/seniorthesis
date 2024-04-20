@@ -1,11 +1,12 @@
 import psycopg2
-from flask import Flask, render_template
+from flask import Flask, render_template, request , Blueprint
 from nba_api.live.nba.endpoints import scoreboard
 
 app = Flask(__name__)
 app.config.from_object("project.config.Config")
 app.config['SECRET_KEY'] = 'secret'
 conn = psycopg2.connect(app.config["SQLALCHEMY_DATABASE_URI"])
+
 
 def livescore():
     return scoreboard.ScoreBoard().games.get_dict()
@@ -30,7 +31,6 @@ def main():
     stats = cur.fetchall()
     cur.close()
     return render_template('index.html', teams=teams, positions=positions, stats=stats, live=live)
-
 
 @app.route('/teams', methods=['GET', 'POST'])
 def get_teams():
@@ -170,26 +170,25 @@ def pbp(team, date):
     cur.close()
     return render_template('pbp.html', colnames=colnames, pbp=pbp)
 
-@app.route('/players')
+@app.route('/players', methods=['GET', 'POST'])
 def player():
     cur = conn.cursor()
 
-    cur.execute('''
-        SELECT ARRAY_AGG(full_name), playerinfo."POSITION" FROM players
-                JOIN playerinfo
-                ON players.id=playerinfo."PERSON_ID"
-                WHERE is_active = 'true' AND playerinfo."POSITION" IS NOT NULL
-                GROUP BY 2
-                ''')
-    players = cur.fetchall()
+    player = request.args.get("player")
 
-    cur.execute('''
-        SELECT DISTINCT "POSITION" FROM playerinfo
-                WHERE "POSITION" IS NOT NULL
-                ''')
-    position = cur.fetchall()
+    if player:
+        cur.execute('''
+            SELECT full_name, playerinfo."POSITION" FROM players
+                    JOIN playerinfo
+                    ON players.id=playerinfo."PERSON_ID"
+                    WHERE is_active = 'true' AND playerinfo."POSITION" IS NOT NULL 
+                    AND players.full_name ILIKE %s
+                    ''', ('%' + player + '%',))
+        players = cur.fetchall()
+    else:
+        players = []
     cur.close()
-    return render_template('players.html', players=players, position=position)
+    return render_template('players.html', players=players)
 
 if __name__ == '__main__':
     app.run(debug=True)
