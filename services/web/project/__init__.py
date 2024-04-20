@@ -170,6 +170,27 @@ def pbp(team, date):
     cur.close()
     return render_template('pbp.html', colnames=colnames, pbp=pbp)
 
+@app.route('/players')
+def player():
+    cur = conn.cursor()
+
+    cur.execute('''
+        SELECT ARRAY_AGG(full_name), playerinfo."POSITION" FROM players
+                JOIN playerinfo
+                ON players.id=playerinfo."PERSON_ID"
+                WHERE is_active = 'true' AND playerinfo."POSITION" IS NOT NULL
+                GROUP BY 2
+                ''')
+    players = cur.fetchall()
+
+    cur.execute('''
+        SELECT DISTINCT "POSITION" FROM playerinfo
+                WHERE "POSITION" IS NOT NULL
+                ''')
+    position = cur.fetchall()
+    cur.close()
+    return render_template('players.html', players=players, position=position)
+
 if __name__ == '__main__':
     app.run(debug=True)
 

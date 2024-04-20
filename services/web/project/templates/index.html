@@ -8,30 +8,46 @@
  
 </head>
 <body>
-  {% block content %}
-
-    <h1>Live Scores</h1>
-    <table>
-        <tr>
-            <th>Date</th>
-            <th>Status</th>
-            <th>Home Team</th>
-            <th>Home Score</th>
-            <th>Away Team</th>
-            <th>Away Score</th>
-        </tr>
-        {% for key in live %}
+{% block content %}
+<div id="react-container"></div>
+<div id = "hometable">
+    {% if live|length == 0 %}
+        <h1>No Games Today!</h1>
+    {% else %}
+        <h1>Live Scores</h1>
+        <table>
             <tr>
-                <td>{{ key['gameEt'][:10] }}</td>
-                <td>{{ key['gameStatusText'] }}</td>
-                <td>{{ key['homeTeam']['teamName'] }}</td>
-                <td>{{ key['homeTeam']['score'] }}</td>
-                <td>{{ key['awayTeam']['teamName'] }}</td>
-                <td>{{ key['awayTeam']['score'] }}</td>
+                <th>Date</th>
+                <th>Time</th>
+                <th>Home Team</th>
+                <th>Home Score</th>
+                <th>Away Team</th>
+                <th>Away Score</th>
             </tr>
-        {% endfor %}
-    </table>    
-  {% endblock %}
-
+            {% for key in live %}
+            {% if (key['homeTeam']['score'] == 0) and (key['awayTeam']['score'] == 0) %}
+                <tr>
+                    <td>{{ key['gameEt'][:10] }}</td>
+                    <td>Game starts @ {{ key['gameStatusText'] }}</td>
+                    <td>{{ key['homeTeam']['teamName'] }}</td>
+                    <td>Score Unavailable</td>
+                    <td>{{ key['awayTeam']['teamName'] }}</td>
+                    <td>Score Unavailable</td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td>{{ key['gameEt'][:10] }}</td>
+                    <td>{{ key['gameStatusText'] }}</td>
+                    <td>{{ key['homeTeam']['teamName'] }}</td>
+                    <td>{{ key['homeTeam']['score'] }}</td>
+                    <td>{{ key['awayTeam']['teamName'] }}</td>
+                    <td>{{ key['awayTeam']['score'] }}</td>
+                </tr>
+            {% endif %}
+            {% endfor %}
+        </table>    
+    {% endif %}
+{% endblock %}
+</div>
 </body>
 </html>

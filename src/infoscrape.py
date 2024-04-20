@@ -29,8 +29,8 @@ playersdf.to_csv(os.path.join(dir, 'players.csv'), index = False)
 '''
 
 # Getting League Games
-gamefinder = leaguegamefinder.LeagueGameFinder(league_id_nullable='00').get_data_frames()[0]
-gamefinder.to_csv(os.path.join(dir, 'games.csv'), index = False)
+#gamefinder = leaguegamefinder.LeagueGameFinder(league_id_nullable='00').get_data_frames()[0]
+#gamefinder.to_csv(os.path.join(dir, 'games.csv'), index = False)
 
 '''
 # Getting active player information as well and player statistics
@@ -53,3 +53,4 @@ playerinfodf.to_csv(os.path.join(dir, 'playerinfo.csv'), index = False)
 statsdf.to_csv(os.path.join(dir, 'playercareerstats.csv'), index = False)
 '''
 
+print(playercareerstats.PlayerCareerStats(player_id = 51).career_totals_regular_season.get_data_frame())

@@ -1,9 +1,13 @@
 /* styles.css */
 header {
-    background-color: #b04e4e;
+    background-color: #610b0b;
     color: #fff;
-    padding: 10px 0;
+    padding: 20px 0;
     font-family: "Times New Roman", Times, serif;
+}
+
+nav {
+    width: 100%; 
 }
 
 nav ul {
@@ -15,6 +19,8 @@ nav ul {
 nav ul li {
     display: inline;
     margin-right: 20px;
+    font-size: 20px;
+
 }
 
 nav ul li a {
@@ -23,12 +29,13 @@ nav ul li a {
 }
 
 nav ul li a:hover {
-    text-decoration: underline;
+    text-decoration: white underline;
 
 }
 
 h1 {
     text-align: center;
+    font-weight: normal;
     
 }
 
@@ -37,7 +44,12 @@ html, body {
     padding: 0;
     height: 100%;
     font-family: "Times New Roman", Times, serif;
+    margin: auto;
+    text-align: center;
+    font-weight: normal;
+    
 }
+
 
 table {
     border-collapse: collapse;
@@ -55,4 +67,13 @@ th {
 table th:first-child,
 table td:first-child {
     width: 500px;
+}
+
+#hometable{
+    width: 1000px;
+    margin: 0 auto;
+    position: absolute;
+    top: 28%;
+    left: 50%;
+    transform: translate(-50%, -50%);
 }
