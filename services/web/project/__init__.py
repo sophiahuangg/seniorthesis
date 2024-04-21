@@ -32,6 +32,7 @@ def main():
     cur.close()
     return render_template('index.html', teams=teams, positions=positions, stats=stats, live=live)
 
+
 @app.route('/teams', methods=['GET', 'POST'])
 def get_teams():
     cur = conn.cursor()
@@ -82,19 +83,10 @@ def get_teams():
 def teamgames(team, wl):
     cur = conn.cursor()
 
-    cur.execute('''
-        SELECT column_name FROM information_schema.columns
-                WHERE table_name LIKE 'games'
-                AND column_name NOT IN ('SEASON_ID', 'TEAM_ID', 'TEAM_NAME', 'GAME_ID', 'WL', 'MIN')
-                ORDER BY ordinal_position
-                ''')
-    colnames = cur.fetchall()
-
     cur.execute(
         '''
-        SELECT "TEAM_ABBREVIATION", "GAME_DATE", "MATCHUP", "PTS", "FGM", "FGA",
-        "FG_PCT", "FG3M", "FG3A", "FG3_PCT", "FTM", "FTA", "FT_PCT",
-        "OREB", "DREB", "REB", "AST", "STL", "BLK", "TOV", "PF", "PLUS_MINUS"
+        SELECT "TEAM_NAME", "GAME_DATE", "MATCHUP", "PTS", "FG_PCT", "FG3_PCT", 
+                "REB", "AST", "STL", "BLK", "TOV"
         FROM games WHERE
         games."TEAM_NAME" = %s AND
         games."WL" = %s
@@ -103,33 +95,28 @@ def teamgames(team, wl):
    )
     games = cur.fetchall()
     
+    colnames = []
+    for column in cur.description:
+        colnames.append(column)
 
     cur.close()
     return render_template('games.html', games=games, colnames=colnames)
+
 
 @app.route('/teams/<team>/<date>/<matchup>')
 def boxscores(team, date, matchup):
     cur = conn.cursor()
 
-    cur.execute('''
-        SELECT column_name FROM information_schema.columns
-                WHERE table_name LIKE 'regseasonboxscores'
-                AND column_name NOT IN ('gameId', 'teamId', 'teamSlug', 'personId', 'nameI', 'playerSlug', 'jerseyNum', 'comment')
-                ORDER BY ordinal_position
-                ''')
-    colnames = cur.fetchall()
 
     cur.execute('''
             WITH scores AS (SELECT *
             FROM playoffboxscores
                 UNION 
                 SELECT * FROM regseasonboxscores)
-        SELECT "teamCity", "teamName" , "teamTricode", "firstName", "familyName", 
+        SELECT CONCAT("teamCity", ' ', "teamName") AS "team", CONCAT("firstName", ' ', "familyName") AS "player", 
                 "position", "minutes", "fieldGoalsMade", 
-                "fieldGoalsAttempted", "fieldGoalsPercentage", "threePointersMade", "threePointersAttempted", 
-                "threePointersPercentage", "freeThrowsMade", "freeThrowsAttempted", "freeThrowsPercentage",
-                "reboundsOffensive", "reboundsDefensive", "reboundsTotal", "assists", "steals", "blocks", "turnovers",
-                "foulsPersonal", "points", "plusMinusPoints" FROM scores
+                "threePointersMade",  "freeThrowsMade", "reboundsTotal", "assists", 
+                "foulsPersonal", "points" FROM scores
         JOIN games ON scores."gameId" = games."GAME_ID"
         WHERE
         games."TEAM_ABBREVIATION" = %s 
@@ -138,20 +125,17 @@ def boxscores(team, date, matchup):
                 ''', (team, date, matchup,))
     boxscores = cur.fetchall()
     
+    colnames = []
+    for column in cur.description:
+        colnames.append(column)
 
     cur.close()
     return render_template('gamestats.html', colnames=colnames, boxscores=boxscores)
 
+
 @app.route('/teams/<team>/<date>/pbp')
 def pbp(team, date):
     cur = conn.cursor()
-
-    cur.execute('''
-        SELECT column_name FROM information_schema.columns
-                WHERE table_name = 'regseasonpbp'
-                ORDER BY ordinal_position
-                ''')
-    colnames = cur.fetchall()
 
     cur.execute('''
             WITH pbp AS (SELECT *
@@ -159,7 +143,8 @@ def pbp(team, date):
                 UNION 
                 SELECT * FROM regseasonpbp)
         SELECT 
-               *
+                "clock", "teamTricode", CONCAT("playerName", ' ', "playerNameI") AS "player",
+                "description", "actionType", "scoreHome", "scoreAway", "pointsTotal"
         FROM pbp
         JOIN games ON pbp."gameId" = games."GAME_ID"
         WHERE
@@ -167,15 +152,27 @@ def pbp(team, date):
         AND games."GAME_DATE" = %s
                 ''', (team, date,))
     pbp = cur.fetchall()
+
+    cur.execute('''
+                SELECT "MATCHUP" FROM games
+                WHERE games."TEAM_ABBREVIATION" = %s AND games."GAME_DATE" = %s
+                ''', (team, date,))
+
+    matchup = cur.fetchall()
+
+    colnames = []
+    for column in cur.description:
+        colnames.append(column)
+
     cur.close()
-    return render_template('pbp.html', colnames=colnames, pbp=pbp)
+    return render_template('pbp.html', colnames=colnames, pbp=pbp, date=date, matchup=matchup)
 
 @app.route('/players', methods=['GET', 'POST'])
 def player():
     cur = conn.cursor()
 
     player = request.args.get("player")
-
+    print("player=", player)
     if player:
         cur.execute('''
             SELECT full_name, playerinfo."POSITION" FROM players
@@ -186,9 +183,16 @@ def player():
                     ''', ('%' + player + '%',))
         players = cur.fetchall()
     else:
-        players = []
+        cur.execute('''
+            SELECT full_name, playerinfo."POSITION" FROM players
+                    JOIN playerinfo
+                    ON players.id=playerinfo."PERSON_ID"
+                    WHERE is_active = 'true' AND playerinfo."POSITION" IS NOT NULL
+                    ''')
+        players = cur.fetchall()
     cur.close()
     return render_template('players.html', players=players)
+
 
 if __name__ == '__main__':
     app.run(debug=True)

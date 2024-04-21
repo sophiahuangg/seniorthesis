@@ -7,24 +7,24 @@
 </head>
 <body>  
     {% block content %}
-
+    <h1>{{games[0][0]}}</h1>
     <table border="1">
         <table border="1">
             <thead>
                 <tbody>
 
-                    {% for col in colnames %}
+                    {% for col in colnames[1:] %}
                         <th colspan>{{ col[0] }}</th>
                     {% endfor %}
                 </tbody>
             </thead>
         {% for game in games %}
         <tr>
-        {%for stat in game%}
+        {%for stat in game[1:]%}
         {% if stat==game[1] %}
-            <td><a href="/teams/{{ game[0]}}/{{game[1]}}/{{game[2]}}">{{game[1]}}</a></td>
+            <td><a href="/teams/{{ game[2][0:3]}}/{{game[1]}}/{{game[2]}}">{{game[1]}}</a></td>
         {%elif stat==game[2]%}
-        <td><a href="/teams/{{ game[0]}}/{{game[1]}}/pbp">{{game[2]}}</a></td>
+        <td><a href="/teams/{{ game[2][0:3]}}/{{game[1]}}/pbp">{{game[2]}}</a></td>
         {% else %}
             <td>{{ stat }}</td>
         {% endif %}

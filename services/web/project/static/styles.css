@@ -36,7 +36,6 @@ nav ul li a:hover {
 h1 {
     text-align: center;
     font-weight: normal;
-    
 }
 
 html, body {
@@ -54,11 +53,14 @@ html, body {
 table {
     border-collapse: collapse;
     width: 100%;
+
 }
 
 th, td {
     border: 1px solid black;
     padding: 8px;
+    width: 150px;
+
 }
 th {
     background-color: #ffffff;
@@ -69,12 +71,4 @@ table td:first-child {
     width: 500px;
 }
 
-#hometable{
-    width: 1000px;
-    margin: 0 auto;
-    position: absolute;
-    top: 28%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-}
 
