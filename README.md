@@ -2,11 +2,14 @@
 
 ## Introduction
 
-This project serves as a tool to search up game specific information for each team of the NBA. The web app displays live game data of the current day. It also displays win loss records for each team and box scores of each won/lost game. For a more detailed analysis, you can also find specific play by play data for each game.
+This project serves as a tool to search up player, team, and game information on the NBA. The product is a web app that allows users to access live game data, win loss records for each team, box score data, play by play data, and individual player data. The purpose is to create a centralized platform for users to search up information on the NBA. All of the data is scraped from the NBA website using an API.
 
-This project is built using the NBA API, SQL, Docker, and Jinja. First, relevant data is scraped using the NBA API, then stored in a PostgresSQL database. In total, there are nine tables that serve as the backend of the project. They contain player, team, and game information that are displayed on the website.
+This project is built using the NBA API, SQL, Docker, and Jinja. After the data scraping process, all of the data is stored in a PostgresSQL database. In total, there are nine tables that serve as the backend of the project. They contain player, team, and game information that can be accessed on the website. With the installation of Docker, individuals can recreate this project on their own by cloning the Github repository.
+
 
 ## Demo
+
+
  ![livescores](img/livescores.png)
 
 
