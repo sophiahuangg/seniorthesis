@@ -3,15 +3,17 @@
 <html>
 <head>
     <title>Players</title>
-    <script src="https://unpkg.com/htmx.org@1.9.4"></script>
+    <script src="https://unpkg.com/htmx.org@1.9.12" integrity="sha384-ujb1lZYygJmzgSwoxRggbCHcjc0rB2XoQrxeTUQyRjrOnlCoYta87iKBWq3EsdM2" crossorigin="anonymous"></script>
 </head>
 <body>
         
 {% block content %}
 <form id="searchForm" hx-get="/players">
-    <input type="text" class="input" placeholder="Find a player" name="player" hx-target="#results">
+    <input type="search" class="form-control" placeholder="Find a player" name="player" hx-target="#results">
+    <button>Search</button>
 </form>
-<h3>Searching for: {{ player }}</h3>
+
+<p>Searching for: {{ player }}</p>
 <table border="1" id="results">
 <tbody>
 {% if players %}

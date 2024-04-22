@@ -14,7 +14,7 @@
         </tr>
         {% for team in teams %}
         <tr>
-            <td>{{ team[0] }}</td>
+            <td><a href="/{{ team[1] }}/roster">{{ team[0] }}</a></td>
             <td>
                 {% for wl in winloss %}
                     {% if wl[0] == team[0] %}

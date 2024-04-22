@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+<!DOCTYPE html>
+<html>
+
+<body>  
+{% block content %}
+<h2>{{teamname[0][0]}} Roster</h2>
+<table>
+{% for col in colnames %}
+<th colspan>{{ col[0] }}</th>
+{% endfor %}
+
+{% for member in roster %}
+<tr>
+<td><a href="/players?player={{member[0]}}">{{member[0]}}</a></td>
+{% for info in member[1:] %}
+<td>{{ info }}</td>
+{%endfor%}
+</tr>
+{%endfor%}
+</table>
+{% endblock %}
+</body>
+</html>

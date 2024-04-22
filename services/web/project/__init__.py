@@ -29,7 +29,7 @@ def get_teams():
     cur = conn.cursor()
 
     cur.execute('''
-        SELECT DISTINCT full_name
+        SELECT DISTINCT full_name, abbreviation
         FROM teams
         ORDER BY 1
     ''')
@@ -49,7 +49,7 @@ def get_teams():
         FROM teams
     JOIN games ON games."TEAM_ID" = teams.id
     WHERE CAST("SEASON_ID" AS INTEGER) % 10000 >= 2014
-    GROUP BY games."WL", teams.full_name, 2
+    GROUP BY games."WL", teams.full_name, 2, 3
     ORDER BY 1, 2 DESC;
 
     ''')
@@ -114,9 +114,9 @@ def boxscores(team, date, matchup):
                 SELECT * FROM regseasonboxscores)
         SELECT CONCAT("teamCity", ' ', "teamName") AS "TEAM NAME", CONCAT("firstName", ' ', "familyName") AS "PLAYER", 
                 "position" AS "POSITION", "minutes" AS "MINUTES", 
-                ROUND(CAST("fieldGoalsMade" AS numeric), 0) AS "FG MADE", 
-                ROUND(CAST("threePointersMade" AS numeric), 0) AS "3P MADE",  
-                ROUND(CAST("freeThrowsMade" AS numeric), 0) AS "FT MADE", 
+                CONCAT(ROUND(CAST("fieldGoalsMade" AS numeric), 0), '-', ROUND(CAST("fieldGoalsAttempted" AS numeric), 0)) AS "FG",
+                CONCAT(ROUND(CAST("freeThrowsMade" AS numeric), 0), '-', ROUND(CAST("freeThrowsAttempted" AS numeric), 0)) AS "FT",
+                CONCAT(ROUND(CAST("threePointersMade" AS numeric), 0), '-', ROUND(CAST("threePointersAttempted" AS numeric), 0)) AS "3P",
                 ROUND(CAST("reboundsTotal" AS numeric), 0) AS "REB", 
                 ROUND(CAST("assists" AS numeric), 0) AS "AST", 
                 ROUND(CAST("foulsPersonal" AS numeric), 0) AS "FOULS", 
@@ -179,10 +179,12 @@ def pbp(team, date):
 
 @app.route('/players', methods=['GET', 'POST'])
 def player():
+    player = request.args.get("player")
+    print("Player:", player)
+
     cur = conn.cursor()
 
-    player = request.args.get("player")
-    if player and player is not None:
+    if player:
         cur.execute('''
             SELECT  players.full_name AS "NAME", playerinfo."TEAM_ABBREVIATION" AS "TEAM", playerinfo."JERSEY" AS "NUMBER", playerinfo."POSITION", playerinfo."HEIGHT", 
                     ROUND(CAST(playerinfo."WEIGHT" AS numeric), 0) AS "WEIGHT", ROUND(CAST(playercareerstats."FG_PCT"*100 AS numeric), 2) AS "FG PCT", 
@@ -215,6 +217,38 @@ def player():
     cur.close()
     return render_template('players.html', players=players, colnames=colnames, player=player)
 
+@app.route('/<team>/roster')
+def teamlist(team):
+    cur = conn.cursor()
+    cur.execute('''
+    SELECT CONCAT("FIRST_NAME", ' ', "LAST_NAME") AS "NAME",
+                "COUNTRY",
+                "BIRTHDATE"::date,
+                "POSITION",
+                "JERSEY",
+                CONCAT("DRAFT_YEAR", ' Round ', "DRAFT_ROUND", ' Pick ', "DRAFT_NUMBER") AS "NBA DRAFT"
+                FROM playerinfo
+                JOIN players 
+                ON players.id=playerinfo."PERSON_ID"
+                JOIN teams
+                ON playerinfo."TEAM_ID"=teams.id
+                WHERE is_active = 'true'
+                AND playerinfo."TEAM_ABBREVIATION" = %s
+                ''', (team,))
+    roster = cur.fetchall()
+    
+    colnames = []
+    for column in cur.description:
+        colnames.append(column)
+
+    cur.execute('''
+                SELECT full_name FROM teams
+                WHERE teams.abbreviation = %s
+                ''', (team,))
+    teamname = cur.fetchall()
+                
+    cur.close()
+    return render_template('teamroster.html', roster=roster, colnames=colnames, teamname=teamname)
 
 if __name__ == '__main__':
     app.run(debug=True)
