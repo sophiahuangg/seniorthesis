@@ -7,7 +7,7 @@ This project serves as a tool to search up player, team, and game information on
 This project is built using the NBA API, SQL, Docker, and Jinja. After the data scraping process, all of the data is stored in a PostgresSQL database. In total, there are nine tables that serve as the backend of the project. They contain player, team, and game information that can be accessed on the website. With the installation of Docker, individuals can recreate this project on their own by cloning the Github repository.
 
 
-## Demo
+## Example Usage
 
 
  ![livescores](img/livescores.png)
