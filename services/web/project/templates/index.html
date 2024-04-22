@@ -7,12 +7,14 @@
     <title>Live Scores</title>
  
 </head>
+
 <body>
 {% block content %}
+
     {% if live|length == 0 %}
-        <h1>No Games Today!</h1>
+        <h1>NO GAMES TODAY!</h1>
     {% else %}
-        <h1>Live Scores</h1>
+        <h1>LIVE SCORES</h1>
         <table>
             <tr>
                 <th>DATE</th>
@@ -45,7 +47,11 @@
             {% endfor %}
         </table>    
     {% endif %}
+
+    <button class="sites"><a href="https://www.nba.com/">NBA WEBSITE</a></button>
+    <button class="sites"><a href="{{ url_for('get_teams') }}">TEAMS</a></button>
+    <button class="sites"><a href="{{ url_for('player') }}">PLAYERS</a></button>
+
 {% endblock %}
-</div>
 </body>
 </html>
