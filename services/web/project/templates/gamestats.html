@@ -18,9 +18,9 @@
             {% endfor %}
             {% for boxscore in topscore %}
             <tr>
-                {% for stat in boxscore %}
-                <td>{{ stat }}</td>
-                {% endfor %}
+                <td>{{ boxscore[0] }}</td>
+                <td><a href="/players?player={{boxscore[1]}}">{{boxscore[1]}}</a></td>
+                <td>{{ boxscore[2] }}</td>
             </tr>
             {% endfor %}
         </tbody>
@@ -34,9 +34,9 @@
             {% endfor %}
             {% for boxscore in topast %}
             <tr>
-                {% for stat in boxscore %}
-                <td>{{ stat }}</td>
-                {% endfor %}
+                <td>{{ boxscore[0] }}</td>
+                <td><a href="/players?player={{boxscore[1]}}">{{boxscore[1]}}</a></td>
+                <td>{{ boxscore[2] }}</td>
             </tr>
             {% endfor %}
         </tbody>
@@ -51,9 +51,9 @@
         {% endfor %}
         {% for boxscore in topreb %}
         <tr>
-            {% for stat in boxscore %}
-            <td>{{ stat }}</td>
-            {% endfor %}
+            <td>{{ boxscore[0] }}</td>
+            <td><a href="/players?player={{boxscore[1]}}">{{boxscore[1]}}</a></td>
+            <td>{{ boxscore[2] }}</td>
         </tr>
         {% endfor %}
     </tbody>

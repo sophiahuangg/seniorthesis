@@ -269,7 +269,12 @@ def teamlist(team):
                 "BIRTHDATE"::date,
                 "POSITION",
                 "JERSEY",
-                CONCAT("DRAFT_YEAR", ' Round ', "DRAFT_ROUND", ' Pick ', "DRAFT_NUMBER") AS "NBA DRAFT"
+                CASE 
+                WHEN "DRAFT_YEAR"='Undrafted'
+                    THEN 'Undrafted'
+                ELSE 
+                    CONCAT("DRAFT_YEAR", ' Round ', "DRAFT_ROUND", ' Pick ', "DRAFT_NUMBER")
+                END AS "NBA DRAFT"
                 FROM playerinfo
                 JOIN players 
                 ON players.id=playerinfo."PERSON_ID"
