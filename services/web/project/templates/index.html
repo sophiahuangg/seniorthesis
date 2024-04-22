@@ -15,12 +15,12 @@
         <h1>Live Scores</h1>
         <table>
             <tr>
-                <th>Date</th>
-                <th>Time</th>
-                <th>Home Team</th>
-                <th>Home Score</th>
-                <th>Away Team</th>
-                <th>Away Score</th>
+                <th>DATE</th>
+                <th>STATUS</th>
+                <th>HOME TEAM</th>
+                <th>HOME SCORE</th>
+                <th>AWAY TEAM</th>
+                <th>AWAY SCORE</th>
             </tr>
             {% for key in live %}
             {% if (key['homeTeam']['score'] == 0) and (key['awayTeam']['score'] == 0) %}

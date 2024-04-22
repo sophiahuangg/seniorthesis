@@ -27,4 +27,4 @@ CREATE TABLE playoffspbp (
 CREATE INDEX ON playOffsPBP ("gameId");
 CREATE INDEX ON playOffsPBP ("teamId");
 CREATE INDEX ON playOffsPBP ("personId");
-
+CREATE INDEX ON playOffsPBP ("teamTricode")
