@@ -6,15 +6,23 @@ This project serves as a tool to search up game specific information for each te
 
 This project is built using the NBA API, SQL, Docker, and Jinja. First, relevant data is scraped using the NBA API, then stored in a PostgresSQL database. In total, there are nine tables that serve as the backend of the project. They contain player, team, and game information that are displayed on the website.
 
-### Main Team Route:
- ![teams](img/teamsimg.png)
+## Demo
+ ![livescores](img/livescores.png)
 
 
-### Example of Box Score Display:
- ![boxscore](img/boxscoresimg.png)
+![teams](img/teams.png)
+![roster](img/roster.png)
 
-### Example of Play By Play Display:
- ![pbp](img/pbpimg.png)
+
+![teamdata](img/teamdata.png)
+
+![playbyplay](img/playbyplay.png)
+![boxscore](img/boxscores.png)
+![playersearch](img/playersearch.png)
+
+
+
+
 
 
 ## NBA API
