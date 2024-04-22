@@ -7,6 +7,62 @@
 <body>  
 {% block content %}
 <h2>{{ matchup }} : {{ date }} BOX SCORES</h2>
+
+<div class="topgame">
+    <table border="1">
+            <caption><b>TOP SCORERS</b></caption>
+        </div>    
+        <tbody>
+            {% for col in scrcol %}
+            <th colspan>{{ col[0] }}</th>
+            {% endfor %}
+            {% for boxscore in topscore %}
+            <tr>
+                {% for stat in boxscore %}
+                <td>{{ stat }}</td>
+                {% endfor %}
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <table border="1">
+            <caption><b>TOP AST</b></caption>
+        <tbody>
+            {% for col in astcol %}
+            <th colspan>{{ col[0] }}</th>
+            {% endfor %}
+            {% for boxscore in topast %}
+            <tr>
+                {% for stat in boxscore %}
+                <td>{{ stat }}</td>
+                {% endfor %}
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <table border="1">
+        <caption><b>TOP REB</b></caption>
+    </div>    
+    <tbody>
+        {% for col in rebcol %}
+        <th colspan>{{ col[0] }}</th>
+        {% endfor %}
+        {% for boxscore in topreb %}
+        <tr>
+            {% for stat in boxscore %}
+            <td>{{ stat }}</td>
+            {% endfor %}
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+</div>
+
+<p></p>
+
+
 <table border="1">
     <thead>
         <tbody>

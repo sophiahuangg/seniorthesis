@@ -108,7 +108,8 @@ def boxscores(team, date, matchup):
 
 
     cur.execute('''
-            WITH scores AS (SELECT *
+        CREATE TEMP TABLE IF NOT EXISTS boxsc AS 
+        WITH scores AS (SELECT *
             FROM playoffboxscores
                 UNION 
                 SELECT * FROM regseasonboxscores)
@@ -128,14 +129,56 @@ def boxscores(team, date, matchup):
         AND games."MATCHUP" = %s
         ORDER BY 1, "PTS" DESC
         ''', (team, date, matchup,))
+    
+    cur.execute('''
+    SELECT * FROM boxsc
+                ''')
+
     boxscores = cur.fetchall()
     
     colnames = []
     for column in cur.description:
         colnames.append(column)
 
+    cur.execute('''
+        SELECT "TEAM NAME", "PLAYER", "PTS" FROM boxsc
+        ORDER BY "PTS" DESC
+        LIMIT 5
+            ''')
+    
+    topscore = cur.fetchall()
+    
+    scrcol = []
+    for column in cur.description:
+        scrcol.append(column)
+
+    cur.execute('''
+        SELECT "TEAM NAME", "PLAYER", "AST" FROM boxsc
+        ORDER BY "AST" DESC
+        LIMIT 5
+            ''')
+    
+    topast = cur.fetchall()
+    
+    astcol = []
+    for column in cur.description:
+        astcol.append(column)
+
+        cur.execute('''
+        SELECT "TEAM NAME", "PLAYER", "REB" FROM boxsc
+        ORDER BY "REB" DESC
+        LIMIT 5
+            ''')
+    
+    topreb = cur.fetchall()
+    
+    rebcol = []
+    for column in cur.description:
+        rebcol.append(column)
+
     cur.close()
-    return render_template('gamestats.html', colnames=colnames, boxscores=boxscores, date=date, matchup=matchup)
+    return render_template('gamestats.html', colnames=colnames, boxscores=boxscores, date=date, matchup=matchup, topscore=topscore, scrcol=scrcol, topast=topast, astcol=astcol,
+                           topreb=topreb, rebcol=rebcol)
 
 
 @app.route('/teams/<team>/<date>/pbp')

@@ -61,7 +61,6 @@ th, td {
     border: 1px solid black;
     padding: 8px;
     width: 150px;
-
 }
 
 
@@ -84,4 +83,17 @@ table td:first-child {
   font-size: 16px;
   border-radius: 8px;
   color: black !important;
+}
+
+
+
+.topgame {
+    display: flex;
+
+}
+
+.topgame table {
+    margin-right: 20px; 
+    margin-left: 20px;
+
 }
